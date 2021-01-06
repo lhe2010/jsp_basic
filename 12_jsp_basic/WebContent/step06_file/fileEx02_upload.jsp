@@ -1,7 +1,10 @@
+<%@page import="_06_file.FileDAO"%>
+<%@page import="_06_file.FileDTO"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,56 +15,45 @@
 	<%
 		request.setCharacterEncoding("utf-8");
 	
-		// 파일이 저장될 위치 지정 
-		String fileSaveLocation = "/Users/hayley/git/jsp_basic/12_jsp_basic/WebContent/step06_file/attachment_file";
-		String enType = "utf-8";	// 인코딩타입
-		int maxSize = 1024*1024*5;			// '한번에' 최대 업로드될 파일의 크기 지정 [byte]단위 1gb=1024*1024*1024 / 5mb넘으면 Exception발생 
-		
-		try { 
+		try {
+			// 파일이 저장될 위치 지정 
+			//String fileSaveLocation = "/Users/hayley/git/jsp_basic/12_jsp_basic/WebContent/step06_file/attachment_file";
+			String fileSaveLocation = "C:\\Users\\Hayley\\git\\12_jsp_basic\\12_jsp_basic\\WebContent\\step06_file\\attachment_file";
+			String enType = "utf-8";	// 인코딩타입
+			int maxSize = 1024*1024*15;	// '한번에' 최대 업로드될 파일의 크기 지정 [byte]단위 1gb=1024*1024*1024 / 5mb넘으면 Exception발생 
 			
-			/*
-				# 파일 업로드를 수행하는 MultipartRequest 객체 생성 ( 핵심 역할 )
-				[ 생성자의 인수 설명 ]
-		        - 첫번째 인자는 폼에서 가져온 인자 값을 얻기 위해 request객체를 전달한다. 
-				- 두번째 인자는 업로드 될 파일의 위치를 입력한다.
-		        - 세번째는 파일 업로드 최대 용량 크기를 의미하며 최대 크기를 넘는경우 Exception이 발생한다.
-		        - 네번째 인자는 한글 이름이 넘어올 경우 한글에 문제되지 않도록 인코딩을 지정한다.
-				- 다섯번째 인자는 똑같은 파일을 업로드 할 경우 중복되지 않도록 파일이름을 변환해 주는 기능을 갖는다.
-		    
-	   		 */
-	   		// MultipartRequest 이 코드가 실제로 파일 업로드를 담당하는 부분이다.
-			MultipartRequest multi = new MultipartRequest(
-														  request,
-														  fileSaveLocation,
-														  maxSize,
-														  enType,
-														  new DefaultFileRenamePolicy());
+			MultipartRequest multi = new MultipartRequest(request, fileSaveLocation, maxSize, enType, new DefaultFileRenamePolicy());
 			
-			////////
+			String userName = multi.getParameter("userName");	// enctype으로 전송되었기 때문에 request.getParameter가 불가능하고 
+			String title = multi.getParameter("title");			// MultipartRequest의 객체로 getParameter를 처리한다. 
+			
 			Enumeration<?> files = multi.getFileNames();
-			if (files.hasMoreElements()) {								// 다음 정보가 있으면
-				String element = (String)files.nextElement();					// file 반환
-				String serverfileName = multi.getFilesystemName(element);		// 서버에 업로드된 파일명을 반환한다.
-				String originalFileName = multi.getOriginalFileName(element); 	// 사용자가 업로드한 파일명을 반환한다.
-				String fileType = multi.getContentType(element);				// 업로드된 파일의 타입을 반환한다.
-				long fileLength = multi.getFile(element).length();				// 파일의 크기를 반환한다. (long 타입)
 			
-				String result = "---------------------------<br>";
-				result += "파라메타 이름 : " + element + "<br>";
-				result += "서버에 업로드된 파일이름 : " + serverfileName +"<br>";
-				result += "사용자가 업로드한 파일이름 : " + originalFileName +"<br>";
-				result += "파일 타입 : " + fileType +"<br>";
-				result += "파일 크기 : " + fileLength +"bytes <br>";
-				result += "------------------------------------";
-						
-				out.println(result);
+			while(files.hasMoreElements()) {
+				FileDTO fdto = new FileDTO();
+				
+				String element = (String)files.nextElement();
+				String serverFileName = multi.getFilesystemName(element);
+				String originalFileName = multi.getOriginalFileName(element);
+				String type = multi.getContentType(element);
+				
+				// 모델에 데이터 셋팅
+				fdto.setUserName(userName);
+				fdto.setTitle(title);
+				fdto.setServerFileName(serverFileName);
+				fdto.setOriginFileName(originalFileName);
+				fdto.setFileType(type);
+
+				FileDAO.getInstance().saveFile(fdto);
 			}
+			response.sendRedirect("fileEx02_list.jsp");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+	
 	%>
-
+	
 </body>
 </html>
