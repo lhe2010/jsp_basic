@@ -14,10 +14,13 @@
 		if(cookies != null ) { // 쿠키 정보가 있으면
 			for(int i = 0; i < cookies.length; i++) {
 				cookies[i].setMaxAge(0);	// 유효기간을 0으로 설정 > 삭제
+				cookies[i].setPath("/");
 				response.addCookie(cookies[i]); // 변경된 설정을 다시 클라이언트에게 전송
 			}
 		}
 	%>
+
+	<h2><a href="cookieEx01_03.jsp">쿠키정보확인 하기</a></h2>
 
 </body>
 </html>
