@@ -7,6 +7,11 @@
 </head>
 <body>
 
+	<%
+		String id = (String)session.getAttribute("id");
+	%>
+	session id : <%=id %> <!-- 이전 방법 -->
+
 	session id   : ${sessionScope.id }	      <!-- sessionScope.id 형식으로 접근 -->
 	session name : ${sessionScope.name }	
 
