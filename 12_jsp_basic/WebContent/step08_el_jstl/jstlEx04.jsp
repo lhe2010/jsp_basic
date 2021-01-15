@@ -27,13 +27,13 @@
 
  	<p><fmt:formatNumber value="${nData }" type="currency" currencySymbol="$" /></p>	<!-- 통화기호 -->
  	
- 	<p><fmt:formatNumber value="100" pattern="000"/></p>	<!-- 패턴지정()????? -->
+ 	<p><fmt:formatNumber value="100" pattern="000"/></p>		<!-- 패턴지정(빈 공간에 0표기) -->
  	<p><fmt:formatNumber value="10" pattern="000"/></p>
  	<p><fmt:formatNumber value="1" pattern="000"/></p>
 	<hr> 	
  	
  	<h3>날짜형식</h3>
-	<p><fmt:formatDate value="${now}"/></p>		<!-- 날짜출력형식지정 -->
+	<p><fmt:formatDate value="${now}"/></p>		<!-- 날짜 출력 형식 지정 -->
 	<p><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></p>
 	<p><fmt:formatDate value="${now}" pattern="yyyyMMdd"/></p>
 	<p><fmt:formatDate value="${now}" pattern="yyyy년MM월dd일"/></p>
