@@ -12,7 +12,7 @@
 		1) if문
 			<c:if test="조건식"></c:if>   
 			- 자바의 if문 기능을 한다.
-			- test값의 조건식이 false면 실행된다.
+			- test값의 조건식이 참이면 실행된다.
 			- 보통 EL로 사용한다.
 			
 		2)	when ~ otherwise문
